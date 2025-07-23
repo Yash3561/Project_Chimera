@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+/agent_memory/
+/sandbox/
+/temp_exec/
+.vscode/
+.idea/

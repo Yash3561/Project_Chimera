@@ -1,0 +1,11 @@
+torch
+torchvision
+torchaudio
+transformers
+accelerate
+bitsandbytes
+sentence-transformers
+huggingface_hub
+chardet
+chromadb
+duckduckgo-search
