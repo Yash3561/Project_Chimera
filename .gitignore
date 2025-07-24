@@ -1,7 +1,25 @@
+# Python virtual environment
+venv/
+env/
+/project/wangj/ygc2/envs/chimera/
+
+# Python cache files
 __pycache__/
-*.pyc
+*.py[cod]
+.cache/         
+.ipynb_checkpoints/ 
+
+# Agent-specific temporary and data files
+/sandbox/*
+!/sandbox/.gitkeep
 /agent_memory/
-/sandbox/
 /temp_exec/
-.vscode/
+/audioseal/      
+
+# Secret files
+.env
+
+# IDE and OS files
 .idea/
+.vscode/
+*.DS_Store
