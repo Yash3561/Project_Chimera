@@ -10,7 +10,7 @@ This project was forged through rigorous, iterative debugging to create a truly 
 
 Chimera is more than a language model in a loop. It's a complete system with a full suite of senses and tools.
 
-*   👀 **See:** Utilizes **Florence-2-large** for state-of-the-art vision, allowing it to perform detailed OCR on full pages of text or generate rich descriptions of images.
+*   👀 **See:** Utilizes **Florence-2-base** for state-of-the-art vision, allowing it to perform detailed OCR on full pages of text or generate rich descriptions of images.
 
 *   🎧 **Hear:** Employs **distil-whisper** for fast, accurate audio transcription, enabling it to process information from audio files like meetings or recordings.
 
