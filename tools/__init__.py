@@ -169,6 +169,28 @@ class MemoryTool:
         except Exception as e: return f"Error recalling memories: {e}"
 # <<< --- END OF FIX --- >>>
 
+class ShellTool:
+    def __init__(self, workspace_dir="sandbox"):
+        self.workspace_dir = os.path.abspath(workspace_dir)
+
+    def execute(self, command: str) -> str:
+        """Executes a shell command in the sandbox directory."""
+        try:
+            process = subprocess.run(
+                command,
+                shell=True,  # Use shell=True to interpret commands like 'ls -l'
+                capture_output=True, text=True, timeout=60,
+                cwd=self.workspace_dir, check=False
+            )
+            output = f"Command executed successfully.\n"
+            if process.stdout:
+                output += f"Output:\n```\n{process.stdout}\n```"
+            if process.stderr:
+                output += f"Error:\n```\n{process.stderr}\n```"
+            return output
+        except Exception as e:
+            return f"An unexpected error occurred during command execution: {e}"
+
 # --- The Master Toolbox Dispatcher ---
 class Toolbox:
     def __init__(self, workspace_dir="sandbox", memory_db_path="agent_memory"):
@@ -182,18 +204,24 @@ class Toolbox:
             "memory": MemoryTool(db_path=memory_db_path),
             "vision": VisionTool(),
             "audio": AudioTool(),
+            "shell": ShellTool(workspace_dir=workspace_dir),
         }
         logging.info("Toolbox ready.")
 
     def use_tool(self, tool_name, args):
-        if tool_name == "respond_to_user": return args.get("text", "...")
+        if tool_name == "respond_to_user":
+            # Accept 'text' (our standard) or 'message' (what it sometimes hallucinates)
+            response_text = args.get("text", args.get("message", "I'm sorry, I had a thought but couldn't express it."))
+            return response_text
         if tool_name not in self.tools: return f"Error: Tool '{tool_name}' not found."
 
         logging.info(f"Using tool: {tool_name} with args: {args}")
         tool_instance = self.tools[tool_name]
 
         method_to_call = None
-        if tool_name in ["filesystem", "memory", "execute_python", "vision"]:
+        if tool_name == "shell":
+            method_to_call = tool_instance.execute
+        elif tool_name in ["filesystem", "memory", "execute_python", "vision"]:
             if 'operation' not in args: return f"Error: 'operation' argument missing."
             operation = args.pop('operation')
             if not hasattr(tool_instance, operation): return f"Error: Invalid operation '{operation}'."
